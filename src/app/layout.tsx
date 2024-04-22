@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import ConvexClientProvider from "../providers/ConvexClientProvider";
+import LoadingLogo from "@/components/ui/shared/LoadingLogo";
 
 export const metadata: Metadata = {
   title: "Create Next App",
