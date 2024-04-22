@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import ConvexClientProvider from "../providers/ConvexClientProvider";
 import LoadingLogo from "@/components/ui/shared/LoadingLogo";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Create Next App",
