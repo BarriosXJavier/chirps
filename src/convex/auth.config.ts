@@ -1,8 +1,10 @@
-export default {
+const authConfig = {
   providers: [
     {
-      domain: "https://flexible-grasshopper-483.convex.cloud",
+      domain: "https://active-tick-72.clerk.accounts.dev",
       applicationID: "convex",
     },
   ],
 };
+
+export default authConfig;

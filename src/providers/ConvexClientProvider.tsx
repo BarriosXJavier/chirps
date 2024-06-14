@@ -1,7 +1,14 @@
-"use client"
+"use client";
 
-import { ClerkProvider, useAuth } from "@clerk/nextjs";
-import { ConvexReactClient } from "convex/react";
+import LoadingLogo from "@/components/ui/shared/LoadingLogo";
+import {
+  ClerkProvider,
+  useAuth,
+  SignedOut,
+  SignedIn,
+  SignInButton,
+} from "@clerk/nextjs";
+import { AuthLoading, Authenticated, ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import React from "react";
 
@@ -10,15 +17,31 @@ type Props = {
 };
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL;
-const pub_key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KE;
+const CLERK_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-const convex = new ConvexReactClient(CONVEX_URL as string);
+if (!CONVEX_URL) {
+  throw new Error("NEXT_PUBLIC_CONVEX_URL environment variable is not set");
+}
 
-const ConvexClientProvider = ({ children }: Props) => {
+if (!CLERK_PUBLISHABLE_KEY) {
+  throw new Error(
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY environment variable is not set"
+  );
+}
+
+const convex = new ConvexReactClient(CONVEX_URL);
+
+const ConvexClientProvider: React.FC<Props> = ({ children }) => {
   return (
-    <ClerkProvider publishableKey={pub_key}>
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
-        {children}
+        <Authenticated>{children}</Authenticated>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <AuthLoading>
+          <LoadingLogo />
+        </AuthLoading>
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );
