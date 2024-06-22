@@ -1,10 +1,10 @@
+import SidebarWrapper from "@/components/ui/shared/sidebar/sidebarWrapper";
+
 type Props = React.PropsWithChildren<{}>
 
 const ConvosLayout: React.FC = ({ children }: Props) => {
     return(
-        <div>
-            {children}
-        </div>
+        <SidebarWrapper>{children}</SidebarWrapper>
     );
 }
 
