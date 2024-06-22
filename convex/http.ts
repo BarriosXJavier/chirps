@@ -2,7 +2,7 @@ import { get } from "./users";
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { Webhook } from "svix"; // Corrected import from 'svix' instead of 'lucide-react'
+import { Webhook } from "svix";
 import { internal } from "./_generated/api";
 
 const validatePayload = async (
@@ -26,6 +26,8 @@ const validatePayload = async (
   }
 };
 
+// Webhook
+
 const handleClerkWebhook = httpAction(async (ctx, req) => {
   const event = await validatePayload(req);
   if (!event) {
@@ -42,8 +44,6 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
       if (user) {
         console.log(`Updating user ${event.data.id} with ${event.data}`);
       }
-
-    //messy stuff right here
 
     case "user.updated":
       console.log("Creating/Updating user ", event.data.id);
