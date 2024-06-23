@@ -1,11 +1,11 @@
-import SidebarWrapper from "@/components/ui/shared/sidebar/sidebarWrapper";
-
 type Props = React.PropsWithChildren<{}>
 
-const ConvosLayout: React.FC = ({ children }: Props) => {
+const ConvosLayout = ( {children}: Props) => {
     return(
-        <SidebarWrapper>{children}</SidebarWrapper>
+        <div>
+            {children}
+        </div>
     );
 }
 
-export default ConvosLayout;
+export default ConvosLayout

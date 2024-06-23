@@ -1,7 +1,13 @@
+import ItemsList from "@/components/ui/shared/itemlist/itemlist";
+
+const Props = {};
+
 const BuddiesPage: React.FC = () => {
     return(
         <div>
-            <p>Your buddies are here</p>
+            <ItemsList title="Friends">
+                 Friend List
+            </ItemsList>
         </div>
     );
 }

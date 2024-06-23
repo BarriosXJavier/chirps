@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
-const DesktopNav: React.FC = () => {
+type Props = {
+  children?: React.ReactNode;
+}
+
+const DesktopNav: React.FC<Props> = ({ children }) => {
   const paths = useNavigation();
 
   return (

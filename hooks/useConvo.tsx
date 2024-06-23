@@ -1,21 +1,16 @@
-import { useParams } from "next/navigation";
+import { useParams } from "next/navigation"
 import { useMemo } from "react";
-import { action } from "../convex/_generated/server";
 
 export const useConvo = () => {
-    const params = useParams();
-    const convoId = useMemo(
-      () => {
-        return params?.convoId || ("" as string);
-      },
-      [params?.convoId]
-    );
-      
-    const active = useMemo(() => {
-        return convoId;
-    }, [convoId]);
+  const params = useParams();
 
-    return {
-        active, convoId
-    };
-};
+  const convoId = useMemo(() => 
+    params?.convoId || ("" as string)
+  , [params?.convoId])
+
+  const active = useMemo(() => !! convoId, [convoId])
+
+  return {
+    active, convoId
+  }
+}

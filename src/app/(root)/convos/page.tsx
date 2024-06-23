@@ -1,7 +1,13 @@
-type Props = {};
 
-const ConvosPage: React.FC = (props: Props) => {
-  return <div>Convos Page</div>;
+type Props = {
+
 };
 
-export default ConvosPage;
+
+const ConvosPage = (props: Props) => {
+  return(
+    <div>All Conversations</div>
+  );
+}
+
+export default ConvosPage
