@@ -1,9 +1,14 @@
+import ConversationFallback from "@/components/ui/shared/conversation/ConversationFallback";
+
 type Props = {};
 
 const ConvosPage = (props: Props) => {
-    return(
-        <div>Conversation Page</div>
-    );
-}
+  return (
+    <>
+      ConversationsPage
+      <ConversationFallback />
+    </>
+  );
+};
 
 export default ConvosPage;

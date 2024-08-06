@@ -1,13 +1,7 @@
-
-type Props = {
-
-};
-
+type Props = {};
 
 const ConvosPage = (props: Props) => {
-  return(
-    <div>All Conversations</div>
-  );
-}
+  return <div>All Conversations</div>;
+};
 
-export default ConvosPage
+export default ConvosPage;

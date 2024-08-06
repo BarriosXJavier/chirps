@@ -1,11 +1,13 @@
-type Props = React.PropsWithChildren<{}>
+import ItemsList from "@/components/ui/shared/itemlist/itemlist";
 
-const ConvosLayout = ( {children}: Props) => {
-    return(
-        <div>
-            {children}
-        </div>
-    );
-}
+type Props = React.PropsWithChildren<{}>;
 
-export default ConvosLayout
+const ConvosLayout = ({ children }: Props) => {
+  return;
+  <>
+    <ItemsList title="convos">{children}</ItemsList>
+    {children}
+  </>;
+};
+
+export default ConvosLayout;
