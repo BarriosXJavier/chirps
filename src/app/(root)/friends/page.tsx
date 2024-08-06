@@ -3,7 +3,7 @@ import ItemsList from "@/components/ui/shared/itemlist/itemlist";
 
 const Props = {};
 
-const BuddiesPage: React.FC = () => {
+const FriendsPage: React.FC = () => {
   return (
     <>
       <ItemsList title="Friends">Friend List</ItemsList>
@@ -12,4 +12,4 @@ const BuddiesPage: React.FC = () => {
   );
 };
 
-export default BuddiesPage;
+export default FriendsPage;
