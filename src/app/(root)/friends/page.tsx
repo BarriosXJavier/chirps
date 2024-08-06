@@ -6,7 +6,7 @@ const Props = {};
 const FriendsPage: React.FC = () => {
   return (
     <>
-      <ItemsList title="Friends">Friend List</ItemsList>
+      <ItemsList title="Friends"></ItemsList>
       <ConversationFallback />
     </>
   );

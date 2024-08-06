@@ -1,14 +1,13 @@
 import ConversationFallback from "@/components/ui/shared/conversation/ConversationFallback";
 
-type Props = {};
+const Props = {};
 
-const ConvosPage = (props: Props) => {
+const ConversationsPage: React.FC = () => {
   return (
     <>
-      ConversationsPage
       <ConversationFallback />
     </>
   );
 };
 
-export default ConvosPage;
+export default ConversationsPage;
