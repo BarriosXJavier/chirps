@@ -12,19 +12,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
 import { ThemeToggle } from "@/components/ui/themes/theme-toggle";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   children?: React.ReactNode;
-}
+};
 
-const MobileNav: React.FC<Props>= ({ children }) => {
+const MobileNav: React.FC<Props> = ({ children }) => {
   const paths = useNavigation();
 
   return (
     <Card className="fixed bottom-4 w-full items-center flex h-16 p-2 lg:hidden">
       <nav className="w-full">
         <ul className="flex items-center justify-evenly">
-          {paths.map(({ name, href, icon, active }) => (
+          {paths.map(({ name, href, icon, active, count }) => (
             <li key={name} className="relative">
               <Link href={href}>
                 <Tooltip>
@@ -35,6 +36,11 @@ const MobileNav: React.FC<Props>= ({ children }) => {
                     >
                       {icon}
                     </Button>
+                    {count ? (
+                      <Badge className="absolute left-7 bottom-6">
+                        {count}
+                      </Badge>
+                    ) : null}
                   </TooltipTrigger>
                   <TooltipContent>{name}</TooltipContent>
                 </Tooltip>
@@ -53,4 +59,4 @@ const MobileNav: React.FC<Props>= ({ children }) => {
   );
 };
 
-export default MobileNav;  
+export default MobileNav;

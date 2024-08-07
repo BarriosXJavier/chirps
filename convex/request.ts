@@ -1,8 +1,6 @@
-import { argv } from "process";
 import { mutation } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { getUserByClerkId } from "./_utils";
-import { ReceiptIcon } from "lucide-react";
 
 export const create = mutation({
   args: {
@@ -41,7 +39,7 @@ export const create = mutation({
       .query("requests")
       .withIndex("by_reciever_sender", (q) =>
         q.eq("reciever", receiver._id).eq("sender", currentUser._id)
-      );
+      ).unique();
 
     if (requestAlreadySent) {
       throw new ConvexError("Request already sent");
@@ -51,7 +49,7 @@ export const create = mutation({
       .query("requests")
       .withIndex("by_reciever_sender", (q) =>
         q.eq("reciever", currentUser._id).eq("sender", receiver._id)
-      );
+      ).unique();
 
     if (requestAlreadyRecieved) {
         throw new ConvexError("This user has already sent you a friend request");
