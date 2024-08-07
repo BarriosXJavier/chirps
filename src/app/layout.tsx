@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import ConvexClientProvider from "../providers/ConvexClientProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ui/themes/theme-provider";
 
 export const metadata: Metadata = {
   title: "Chirps",
@@ -17,9 +18,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={GeistSans.className}>
-        <ConvexClientProvider>
-          <TooltipProvider>{children}</TooltipProvider>
-        </ConvexClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem={true}
+          themes={["light", "dark"]}
+        >
+          <ConvexClientProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </ConvexClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

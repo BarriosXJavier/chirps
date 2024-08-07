@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
+import { ThemeToggle } from "@/components/ui/themes/theme-toggle";
 
 type Props = {
   children?: React.ReactNode;
@@ -40,6 +41,9 @@ const MobileNav: React.FC<Props>= ({ children }) => {
               </Link>
             </li>
           ))}
+          <li>
+            <ThemeToggle />
+          </li>
           <li>
             <UserButton />
           </li>

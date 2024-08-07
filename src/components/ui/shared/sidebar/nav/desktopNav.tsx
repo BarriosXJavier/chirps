@@ -10,6 +10,7 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/themes/theme-toggle";
 
 type Props = {
   children?: React.ReactNode;
@@ -42,6 +43,7 @@ const DesktopNav: React.FC<Props> = ({ children }) => {
         </ul>
       </nav>
       <div className="flex flex-col items-center gap-4">
+        <ThemeToggle />
         <UserButton />
       </div>
     </Card>
