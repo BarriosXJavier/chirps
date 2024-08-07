@@ -1,5 +1,5 @@
 import React from "react";
-import { TypeOf, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -24,8 +24,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-type Props = {};
+import { useMutationState } from "../../../../../hooks/useMutationState";
+import { api } from "../../../../../convex/_generated/api";
+import { toast } from "sonner";
+import { ConvexError } from "convex/values";
 
 const AddFriendSchema = z.object({
   email: z
@@ -34,7 +36,10 @@ const AddFriendSchema = z.object({
     .email("Please enter a valid email"),
 });
 
-const AddFriendDialogue = (props: Props) => {
+const AddFriendDialogue = () => {
+  const { mutate: createRequest, pending } = useMutationState(
+    api.request.create
+  );
   const form = useForm<z.infer<typeof AddFriendSchema>>({
     resolver: zodResolver(AddFriendSchema),
     defaultValues: {
@@ -42,16 +47,30 @@ const AddFriendDialogue = (props: Props) => {
     },
   });
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (values: z.infer<typeof AddFriendSchema>) => {
+    await createRequest({ email: values.email })
+      .then(() => {
+        form.reset();
+        toast.success("Friend request sent!");
+      })
+      .catch((error) => {
+        toast.error(
+          error instanceof ConvexError
+            ? error.data
+            : "An unexpected error occurred!"
+        );
+      });
+  };
+
   return (
     <Dialog>
       <Tooltip>
-        <TooltipTrigger>
-          <Button size="icon" variant="outline">
-            <DialogTrigger>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button size="icon" variant="outline">
               <UserPlus />
-            </DialogTrigger>
-          </Button>
+            </Button>
+          </DialogTrigger>
         </TooltipTrigger>
         <TooltipContent>
           <p>Add Friend</p>
@@ -80,14 +99,16 @@ const AddFriendDialogue = (props: Props) => {
                 </FormItem>
               )}
             ></FormField>
+            <DialogFooter>
+              <Button size="sm" variant="outline" onClick={() => form.reset()}>
+                Cancel
+              </Button>
+              <Button size="sm" type="submit">
+                Send Request
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
-        <DialogFooter>
-          <Button size="sm" variant="outline">
-            Cancel
-          </Button>
-          <Button size="sm">Send Request</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
