@@ -103,7 +103,7 @@ const AddFriendDialogue = () => {
               <Button size="sm" variant="outline" onClick={() => form.reset()}>
                 Cancel
               </Button>
-              <Button size="sm" type="submit">
+              <Button size="sm" type="submit" disabled={pending}>
                 Send Request
               </Button>
             </DialogFooter>

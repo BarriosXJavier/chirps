@@ -41,27 +41,29 @@ export const get = query({
   },
 });
 
+export const count = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
 
-export const count = query({args: {}, handler: async(ctx, args) => {
-     const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Unauthorized!");
+    }
 
-     if (!identity) {
-       throw new Error("Unauthorized!");
-     }
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
 
-     const currentUser = await getUserByClerkId({
-       ctx,
-       clerkId: identity.subject,
-     });
+    if (!currentUser) {
+      throw new ConvexError("User not found!");
+    }
 
-     if (!currentUser) {
-       throw new ConvexError("User not found!");
-     }
-
-     const requests = await ctx.db
-       .query("requests")
-       .withIndex("by_receiver", (q) => q.eq("reciever", currentUser._id))
-       .collect();
+    const requests = await ctx.db
+      .query("requests")
+      .withIndex("by_receiver", (q) => q.eq("reciever", currentUser._id))
+      .collect();
 
     return requests.length;
-}})
+  },
+});
