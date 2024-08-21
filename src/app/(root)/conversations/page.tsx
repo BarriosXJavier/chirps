@@ -9,12 +9,11 @@ import { Id } from "../../../../convex/_generated/dataModel";
 type Props = {
   params: {
     conversationId: Id<"conversations">;
-
   }
 };
 
-const ConversationsPage = ({params: conversationId}: Props) => {
-  const conversations = useQuery(api.conversations.get, {id: conversationId})
+const ConversationsPage = ({ params }: Props) => {
+  const conversations = useQuery(api.conversations.get, { id: params.conversationId });
   return (
     <>
       

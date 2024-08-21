@@ -110,3 +110,5 @@ const getMessageContent = (type: string, content: string) => {
       return "[Unsupported message type]";
   }
 };
+
+export default getLastMessageDetails
