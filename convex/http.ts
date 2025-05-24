@@ -6,7 +6,7 @@ import { Webhook } from "svix";
 import { internal } from "./_generated/api";
 
 const validatePayload = async (
-  req: Request
+  req: Request,
 ): Promise<WebhookEvent | undefined> => {
   const payload = await req.text();
   const svixHeaders = {
@@ -27,7 +27,6 @@ const validatePayload = async (
 };
 
 // Webhook
-
 const handleClerkWebhook = httpAction(async (ctx, req) => {
   const event = await validatePayload(req);
   if (!event) {
@@ -37,15 +36,15 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
   }
 
   switch (event.type) {
-    case "user.created":
-      const user = await ctx.runQuery(internal.user.get, {
+    case "user.created": {
+      const user = await ctx.runQuery(internal.users.get, {
         clerkId: event.data.id,
       });
       if (user) {
         console.log(`Updating user ${event.data.id} with ${event.data}`);
       }
-
-    case "user.updated":
+    }
+    case "user.updated": {
       console.log("Creating/Updating user ", event.data.id);
 
       await ctx.runMutation(internal.users.create, {
@@ -54,11 +53,12 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
         clerkId: event?.data.id,
         email: event?.data.email_addresses[0].email_address,
       });
-
       break;
+    }
 
-    default:
+    default: {
       console.log("Clerk webhook not supported", event.type);
+    }
   }
 
   return new Response(null, {
@@ -68,6 +68,7 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
 
 const http = httpRouter();
 
+// When a user signs up, this will be used
 http.route({
   path: "/clerk-users-webhook",
   method: "POST",

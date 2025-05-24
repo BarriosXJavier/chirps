@@ -39,7 +39,7 @@ export const create = mutation({
     const requestAlreadySent = await ctx.db
       .query("requests")
       .withIndex("by_reciever_sender", (q) =>
-        q.eq("reciever", receiver._id).eq("sender", currentUser._id)
+        q.eq("reciever", receiver._id).eq("sender", currentUser._id),
       )
       .unique();
 
@@ -50,7 +50,7 @@ export const create = mutation({
     const requestAlreadyRecieved = await ctx.db
       .query("requests")
       .withIndex("by_reciever_sender", (q) =>
-        q.eq("reciever", currentUser._id).eq("sender", receiver._id)
+        q.eq("reciever", currentUser._id).eq("sender", receiver._id),
       )
       .unique();
 

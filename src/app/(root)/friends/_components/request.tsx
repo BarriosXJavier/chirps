@@ -1,4 +1,3 @@
-import React from "react";
 import { Id } from "../../../../../convex/_generated/dataModel";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -18,11 +17,11 @@ type Props = {
 
 const Request = ({ id, imageUrl, username, email }: Props) => {
   const { mutate: denyRequest, pending: denyPending } = useMutationState(
-    api.request.deny
+    api.request.deny,
   );
 
   const { mutate: acceptRequest, pending: acceptPending } = useMutationState(
-    api.request.accept
+    api.request.accept,
   );
 
   return (
@@ -51,7 +50,7 @@ const Request = ({ id, imageUrl, username, email }: Props) => {
                 toast.error(
                   error instanceof ConvexError
                     ? error.message
-                    : "Unexpected error occurred"
+                    : "Unexpected error occurred",
                 );
               });
           }}
@@ -71,7 +70,7 @@ const Request = ({ id, imageUrl, username, email }: Props) => {
                 toast.error(
                   error instanceof ConvexError
                     ? error.message
-                    : "Unexpected error occurred"
+                    : "Unexpected error occurred",
                 );
               });
           }}

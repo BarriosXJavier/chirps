@@ -1,4 +1,4 @@
-import SidebarWrapper from "@/components/ui/shared/sidebar/sidebarWrapper";
+import SidebarWrapper from "@/components/ui/shared/sidebar/SidebarWrapper";
 
 type Props = React.PropsWithChildren<{}>;
 

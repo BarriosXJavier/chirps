@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ItemsList from "@/components/ui/shared/itemlist/itemlist";
+import ItemsList from "@/components/ui/shared/itemlist/ItemList";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Loader2 } from "lucide-react";

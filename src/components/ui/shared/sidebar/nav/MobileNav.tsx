@@ -9,21 +9,27 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/themes/theme-toggle";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useConvo } from "../../../../../../hooks/useConvo";
 
 type Props = {
   children?: React.ReactNode;
 };
 
-const DesktopNav: React.FC<Props> = ({ children }) => {
+const MobileNav: React.FC<Props> = ({ children }) => {
   const paths = useNavigation();
 
+  const { active } = useConvo();
+
+  if (active) {
+    return null;
+  }
   return (
-    <Card className="hidden lg:flex lg:flex-col lg:justify-between lg:items-center lg:h-full lg:w-16 lg:px-2 lg:py-4">
-      <nav>
-        <ul className="flex flex-col items-center gap-4">
+    <Card className="fixed bottom-4 left-4 right-4 items-center flex h-16 p-2 lg:hidden">
+      <nav className="w-full">
+        <ul className="flex items-center justify-evenly">
           {paths.map(({ name, href, icon, active, count }) => (
             <li key={name} className="relative">
               <Link href={href}>
@@ -35,27 +41,27 @@ const DesktopNav: React.FC<Props> = ({ children }) => {
                     >
                       {icon}
                     </Button>
-                    {
-                      count ? (
-                        <Badge className="absolute left-6 bottom-7 px-2">
-                          {count}
-                        </Badge>
-                      ) : null
-                    }
+                    {path.count ? (
+                      <Badge className="absolute left-7 bottom-6">
+                        {path.count}
+                      </Badge>
+                    ) : null}
                   </TooltipTrigger>
                   <TooltipContent>{name}</TooltipContent>
                 </Tooltip>
               </Link>
             </li>
           ))}
+          <li>
+            <ThemeToggle />
+          </li>
+          <li>
+            <UserButton />
+          </li>
         </ul>
       </nav>
-      <div className="flex flex-col items-center gap-4">
-        <ThemeToggle />
-        <UserButton />
-      </div>
     </Card>
   );
 };
 
-export default DesktopNav;
+export default MobileNav;

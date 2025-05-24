@@ -10,7 +10,6 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
 import { ThemeToggle } from "@/components/ui/themes/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 
@@ -18,13 +17,13 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const MobileNav: React.FC<Props> = ({ children }) => {
+const DesktopNav: React.FC<Props> = ({ children }) => {
   const paths = useNavigation();
 
   return (
-    <Card className="fixed bottom-4 w-full items-center flex h-16 p-2 lg:hidden">
-      <nav className="w-full">
-        <ul className="flex items-center justify-evenly">
+    <Card className="hidden lg:flex lg:flex-col lg:justify-between lg:items-center lg:h-full lg:w-16 lg:px-2 lg:py-4">
+      <nav>
+        <ul className="flex flex-col items-center gap-4">
           {paths.map(({ name, href, icon, active, count }) => (
             <li key={name} className="relative">
               <Link href={href}>
@@ -36,9 +35,9 @@ const MobileNav: React.FC<Props> = ({ children }) => {
                     >
                       {icon}
                     </Button>
-                    {count ? (
-                      <Badge className="absolute left-7 bottom-6">
-                        {count}
+                    {path.count ? (
+                      <Badge className="absolute left-6 bottom-7 px-2">
+                        {path.count}
                       </Badge>
                     ) : null}
                   </TooltipTrigger>
@@ -47,16 +46,14 @@ const MobileNav: React.FC<Props> = ({ children }) => {
               </Link>
             </li>
           ))}
-          <li>
-            <ThemeToggle />
-          </li>
-          <li>
-            <UserButton />
-          </li>
         </ul>
       </nav>
+      <div className="flex flex-col items-center gap-4">
+        <ThemeToggle />
+        <UserButton />
+      </div>
     </Card>
   );
 };
 
-export default MobileNav;
+export default DesktopNav;

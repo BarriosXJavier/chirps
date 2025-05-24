@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import ConversationFallback from "@/components/ui/shared/conversation/ConversationFallback";
 import ConversationContainer from "@/components/ui/shared/conversation/ConversationContainer";
@@ -9,16 +9,14 @@ import { Id } from "../../../../convex/_generated/dataModel";
 type Props = {
   params: {
     conversationId: Id<"conversations">;
-  }
+  };
 };
 
 const ConversationsPage = ({ params }: Props) => {
-  const conversations = useQuery(api.conversations.get, { id: params.conversationId });
-  return (
-    <>
-      
-    </>
-  );
+  const conversations = useQuery(api.conversations.get, {
+    id: params.conversationId,
+  });
+  return <></>;
 };
 
 export default ConversationsPage;

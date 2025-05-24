@@ -58,24 +58,24 @@ const ConversationsPage = ({ params: conversationId }: Props) => {
       options=
       {conversation.isGroup
         ? [
-            {
-              label: "Leave Group",
-              destructive: false,
-              onclick: () => setLeaveGroupDialogOpen(true),
-            },
-            {
-              label: "Delete Group",
-              destructive: true,
-              onclick: () => setDeleteGroupDialogOpen(true),
-            },
-          ]
+          {
+            label: "Leave Group",
+            destructive: false,
+            onclick: () => setLeaveGroupDialogOpen(true),
+          },
+          {
+            label: "Delete Group",
+            destructive: true,
+            onclick: () => setDeleteGroupDialogOpen(true),
+          },
+        ]
         : [
-            {
-              label: "Remove Friend",
-              destructive: true,
-              onclick: () => setRemoveFriendDialogOpen(true),
-            },
-          ]}
+          {
+            label: "Remove Friend",
+            destructive: true,
+            onclick: () => setRemoveFriendDialogOpen(true),
+          },
+        ]}
       <Body />
       <ChatInput />
     </ConversationContainer>
