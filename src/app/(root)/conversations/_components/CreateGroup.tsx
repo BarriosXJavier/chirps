@@ -84,10 +84,11 @@ const CreateGroup = (props: Props) => {
         toast.success("Group created successfully");
       })
       .catch((error) => {
+        console.error("Error creating group:", error);
         toast.error(
           error instanceof ConvexError
-            ? error.data
-            : "An unexpected error occured"
+            ? String(error.data)
+            : "An unexpected error occurred"
         );
       });
   };
@@ -157,7 +158,10 @@ const CreateGroup = (props: Props) => {
                                   friend._id,
                                 ]);
                               } else {
-                                form.setValue("members", members.filter(id => id !== friend._id));
+                                form.setValue(
+                                  "members",
+                                  members.filter((id) => id !== friend._id)
+                                );
                               }
                             }}
                           >
@@ -176,40 +180,48 @@ const CreateGroup = (props: Props) => {
                     </DropdownMenu>
                   </FormControl>
                   <FormMessage />
-
-                  
                 </FormItem>
               )}
             />
             {members && members.length ? (
               <Card className="flex items-center gap-3 overflow-x-auto w-full h-24 p-2 no-scrollbar">
-                {friends?.filter((friend) => members.includes(friend._id)).map((friend) => {
-                  return (
-                    <div
-                      key={friend._id}
-                      className="flex flex-col items-center gap-1"
-                    >
-                      <div className="relative">
-                        <Avatar>
-                          <AvatarImage src={friend.imageUrl} />
-                          <AvatarFallback>
-                            {friend.username.substring(0, 1)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <X className="text-muted-foreground h-4 w-4 absolute bottom-8 left-7 bg-muted rounded-full cursor-pointer" onClick={() => {
-                          form.setValue("members", members.filter(id => id !== friend._id))
-                        }}/>
+                {friends
+                  ?.filter((friend) => members.includes(friend._id))
+                  .map((friend) => {
+                    return (
+                      <div
+                        key={friend._id}
+                        className="flex flex-col items-center gap-1"
+                      >
+                        <div className="relative">
+                          <Avatar>
+                            <AvatarImage src={friend.imageUrl} />
+                            <AvatarFallback>
+                              {friend.username.substring(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <X
+                            className="text-muted-foreground h-4 w-4 absolute bottom-8 left-7 bg-muted rounded-full cursor-pointer"
+                            onClick={() => {
+                              form.setValue(
+                                "members",
+                                members.filter((id) => id !== friend._id)
+                              );
+                            }}
+                          />
+                        </div>
+                        <p className="text-sm font-medium truncate">
+                          {friend.username.split(" ")[0]}
+                        </p>
                       </div>
-                      <p className="text-sm font-medium truncate">{friend.username.split(" ")[0]}</p>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </Card>
             ) : null}
             <DialogFooter>
-                <Button disabled={pending} type="submit">
-                    Create
-                </Button>
+              <Button disabled={pending} type="submit">
+                Create
+              </Button>
             </DialogFooter>
           </form>
         </Form>

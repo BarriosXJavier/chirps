@@ -29,14 +29,15 @@ const LeaveGroupDialogue = ({ conversationId, open, setOpen }: Props) => {
 
   const handleLeaveGroup = async () => {
     leaveGroup({ conversationId })
-      .then(() => {
+      .then((result) => {
         toast.success("You have left the group");
         setOpen(false); // Close the dialog after successful leave
       })
       .catch((error) => {
+        console.error("Error leaving group:", error);
         toast.error(
           error instanceof ConvexError
-            ? error.data
+            ? String(error.data)
             : "Unexpected error occurred"
         );
       });

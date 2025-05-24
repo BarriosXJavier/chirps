@@ -12,11 +12,10 @@ type Props = {
   };
 };
 
-const ConversationsPage = ({ params }: Props) => {
-  const conversations = useQuery(api.conversations.get, {
-    id: params.conversationId,
-  });
-  return <></>;
+const ConversationsPage = () => {
+  // Note: We're not using params here since this is the root conversations page
+  // and not a specific conversation page with an ID
+  return <ConversationFallback />;
 };
 
 export default ConversationsPage;

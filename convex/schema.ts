@@ -40,8 +40,19 @@ export default defineSchema({
     .index("by_memberId_conversationId", ["memberId", "conversationId"]),
   messages: defineTable({
     senderId: v.id("users"),
-    conversationId: v.id("users"),
+    conversationId: v.id("conversations"),
     type: v.string(),
     content: v.array(v.string()),
   }).index("by_conversationId", ["conversationId"]),
+
+  // Ephemeral typing indicators stored with regular tables since Convex Free Tier
+  // doesn't support system tables
+  typing_indicators: defineTable({
+    userId: v.id("users"),
+    username: v.string(),
+    conversationId: v.id("conversations"),
+    expiresAt: v.number(),
+  })
+    .index("by_conversation", ["conversationId"])
+    .index("by_expiration", ["expiresAt"]),
 });

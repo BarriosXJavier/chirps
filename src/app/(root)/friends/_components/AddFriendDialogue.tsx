@@ -49,14 +49,15 @@ const AddFriendDialogue = () => {
 
   const handleSubmit = async (values: z.infer<typeof AddFriendSchema>) => {
     await createRequest({ email: values.email })
-      .then(() => {
+      .then((result) => {
         form.reset();
         toast.success("Friend request sent!");
       })
       .catch((error) => {
+        console.error("Error creating friend request:", error);
         toast.error(
           error instanceof ConvexError
-            ? error.data
+            ? String(error.data)
             : "An unexpected error occurred!"
         );
       });

@@ -7,7 +7,7 @@ import { api } from "../convex/_generated/api";
 export const useNavigation = () => {
   const pathname = usePathname();
 
-  const requestsCount = useQuery(api.requests.count)
+  const requestsCount = useQuery(api.requests.count) || 0;
 
   const paths = useMemo(
     () => [
@@ -26,7 +26,7 @@ export const useNavigation = () => {
         count: requestsCount,
       },
     ],
-    [pathname, requestsCount],
+    [pathname, requestsCount]
   );
 
   return paths;

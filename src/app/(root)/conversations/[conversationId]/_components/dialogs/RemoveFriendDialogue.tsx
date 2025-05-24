@@ -26,12 +26,16 @@ const RemoveFriendDialogue = ({ conversationId, open, setOpen }: Props) => {
   const { mutate: removeFriend, pending } = useMutationState(api.friend.remove);
   const handleRemoveFriend = async () => {
     removeFriend({ conversationId })
-      .then(() => {
+      .then((result) => {
         toast.success("Friend removed");
+        setOpen(false); // Close the dialog after successful removal
       })
       .catch((error) => {
+        console.error("Error removing friend:", error);
         toast.error(
-          error instanceof ConvexError ? error.data : "Unexpected error occured"
+          error instanceof ConvexError
+            ? String(error.data)
+            : "Unexpected error occurred"
         );
       });
   };
@@ -46,7 +50,9 @@ const RemoveFriendDialogue = ({ conversationId, open, setOpen }: Props) => {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
-        <AlertDialogAction disabled={pending} onClick={handleRemoveFriend}>Remove</AlertDialogAction>
+        <AlertDialogAction disabled={pending} onClick={handleRemoveFriend}>
+          Remove
+        </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialog>
   );

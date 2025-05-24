@@ -32,7 +32,9 @@ export const get = query({
         const conversation = await ctx.db.get(membership.conversationId);
 
         if (!conversation) {
-          throw new ConvexError("conversation could not be found");
+          console.error("Conversation not found:", membership.conversationId);
+          // Return null instead of throwing error to prevent UI crashes
+          return null;
         }
         return conversation;
       })
@@ -40,30 +42,61 @@ export const get = query({
 
     // Get all conversations that a user is a member of
 
+    // Filter out null conversations
+    const validConversations = conversations.filter(
+      (conversation) => conversation !== null
+    );
+
     const conversionsWithDetails = await Promise.all(
-      conversations.map(async (conversation, index) => {
+      validConversations.map(async (conversation, index) => {
+        // Make sure conversation exists and has an _id before proceeding
+        if (!conversation || !conversation._id) {
+          console.error("Invalid conversation found:", conversation);
+          return { conversation: null };
+        }
+
         const allconversationsMemberships = await ctx.db
           .query("conversationMembers")
           .withIndex("conversationId", (q) =>
-            q.eq("conversationId", conversation?._id)
+            q.eq("conversationId", conversation._id)
           )
           .collect();
 
-        const lastMessage = await getLastMessageDetails({ ctx, id: conversation.lastMessageId });
+        const lastMessage = await getLastMessageDetails({
+          ctx,
+          id: conversation.lastMessageId,
+        });
 
-        if (conversation.isGroup) {
-          return { conversation, lastMessage };
-        } else {
-          const otherMembership = allconversationsMemberships.filter(
-            (membership) => membership.memberId !== currentUser._id
-          )[0];
-          const otherMember = await ctx.db.get(otherMembership.memberId);
+        try {
+          if (conversation.isGroup) {
+            return { conversation, lastMessage };
+          } else {
+            const otherMemberships = allconversationsMemberships.filter(
+              (membership) => membership.memberId !== currentUser._id
+            );
 
-          return {
-            conversation,
-            otherMember,
-            lastMessage,
-          };
+            // Handle case where there are no other memberships
+            if (!otherMemberships.length) {
+              console.error(
+                "No other members found in conversation:",
+                conversation._id
+              );
+              return { conversation, otherMember: null, lastMessage };
+            }
+
+            const otherMembership = otherMemberships[0];
+            const otherMember = await ctx.db.get(otherMembership.memberId);
+
+            return {
+              conversation,
+              otherMember,
+              lastMessage,
+            };
+          }
+        } catch (error) {
+          console.error("Error processing conversation:", error);
+          // Return a minimal safe object
+          return { conversation };
         }
       })
     );
@@ -94,7 +127,10 @@ const getLastMessageDetails = async ({
   if (!sender) {
     return null;
   }
-  const content = getMessageContent(message.type, message.content as unknown as string);
+  const content = getMessageContent(
+    message.type,
+    message.content as unknown as string
+  );
 
   return {
     content,
@@ -103,7 +139,7 @@ const getLastMessageDetails = async ({
 };
 
 const getMessageContent = (type: string, content: string) => {
-  switch(type) {
+  switch (type) {
     case "text":
       return content;
     default:
@@ -111,4 +147,4 @@ const getMessageContent = (type: string, content: string) => {
   }
 };
 
-export default getLastMessageDetails
+export default getLastMessageDetails;

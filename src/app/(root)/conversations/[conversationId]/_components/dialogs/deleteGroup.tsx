@@ -23,17 +23,22 @@ type Props = {
 };
 
 const DeleteGroupDialogue = ({ conversationId, open, setOpen }: Props) => {
-  const { mutate: deleteGroup, pending } = useMutationState(api.conversation.deleteGroup);
-  
+  const { mutate: deleteGroup, pending } = useMutationState(
+    api.conversation.deleteGroup
+  );
+
   const handleDeleteGroup = async () => {
     deleteGroup({ conversationId })
-      .then(() => {
+      .then((result) => {
         toast.success("Group deleted");
         setOpen(false); // Close the dialog after successful deletion
       })
       .catch((error) => {
+        console.error("Error deleting group:", error);
         toast.error(
-          error instanceof ConvexError ? error.data : "Unexpected error occurred"
+          error instanceof ConvexError
+            ? String(error.data)
+            : "Unexpected error occurred"
         );
       });
   };

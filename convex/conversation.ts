@@ -27,7 +27,8 @@ export const get = query({
     const conversation = await ctx.db.get(args.id);
 
     if (!conversation) {
-      throw new ConvexError("Conversation not found!");
+      // Return null instead of throwing an error - this allows the UI to handle this case gracefully
+      return null;
     }
 
     const membership = await ctx.db
@@ -124,6 +125,8 @@ export const createGroup = mutation({
         })
       )
     );
+
+    return { status: "Group created successfully", conversationId };
   },
 });
 
@@ -265,6 +268,11 @@ export const deleteGroup = mutation({
       throw new ConvexError("Conversation not found!");
     }
 
+    // Check if this is actually a group
+    if (!conversation.isGroup) {
+      throw new ConvexError("Cannot delete a direct message conversation!");
+    }
+
     const membership = await ctx.db
       .query("conversationMembers")
       .withIndex("by_memberId_conversationId", (q) =>
@@ -278,11 +286,22 @@ export const deleteGroup = mutation({
       throw new ConvexError("You are not a member of this conversation!");
     }
 
-    // Assuming the creator or admin has a specific role. Try functionality later
-    if (conversation.creatorId !== currentUser._id) {
-      throw new ConvexError("You do not have permission to delete this conversation!");
-    }
+    // Get all messages in this conversation
+    const messages = await ctx.db
+      .query("messages")
+      .withIndex("by_conversationId", (q) =>
+        q.eq("conversationId", args.conversationId as any)
+      )
+      .collect();
 
+    // Delete all messages first
+    await Promise.all(
+      messages.map(async (message) => {
+        await ctx.db.delete(message._id);
+      })
+    );
+
+    // Get all memberships for this conversation
     const memberships = await ctx.db
       .query("conversationMembers")
       .withIndex("conversationId", (q) =>
@@ -290,13 +309,17 @@ export const deleteGroup = mutation({
       )
       .collect();
 
-    await ctx.db.delete(args.conversationId);
-
+    // Delete all memberships
     await Promise.all(
       memberships.map(async (membership) => {
         await ctx.db.delete(membership._id);
       })
     );
+
+    // Finally, delete the conversation itself
+    await ctx.db.delete(args.conversationId);
+
+    return { status: "Group deleted successfully" };
 
     return { success: true };
   },

@@ -22,26 +22,33 @@ const ConversationsLayout: React.FC<Props> = ({ children }: Props) => {
               No conversations found
             </p>
           ) : (
-            conversations.map((conversations) => {
-              return conversations.conversation.isGroup ? (
-                <GroupConversationItem
-                  key={conversations.conversation._id}
-                  id={conversations.conversation._id}
-                  name={conversations.conversation.name || ""}
-                  lastMessageSender={conversations.lastMessage?.sender || ""}
-                  lastMessageContent={conversations.lastMessage?.content || ""}
-                />
-              ) : (
-                <DMConversation
-                  key={conversations.conversation._id}
-                  id={conversations.conversation._id}
-                  username={conversations.otherMember?.username || ""}
-                  imageUrl={conversations.otherMember?.imageUrl || ""}
-                  lastMessageSender={conversations.lastMessage?.sender || ""}
-                  lastMessageContent={conversations.lastMessage?.content || ""}
-                />
-              );
-            })
+            conversations
+              .map((conv) => {
+                if (!conv.conversation) {
+                  console.error("Conversation data missing:", conv);
+                  return null;
+                }
+
+                return conv.conversation.isGroup ? (
+                  <GroupConversationItem
+                    key={conv.conversation._id}
+                    id={conv.conversation._id}
+                    name={conv.conversation.name || ""}
+                    lastMessageSender={conv.lastMessage?.sender || ""}
+                    lastMessageContent={conv.lastMessage?.content || ""}
+                  />
+                ) : (
+                  <DMConversation
+                    key={conv.conversation._id}
+                    id={conv.conversation._id}
+                    username={conv.otherMember?.username || ""}
+                    imageUrl={conv.otherMember?.imageUrl || ""}
+                    lastMessageSender={conv.lastMessage?.sender || ""}
+                    lastMessageContent={conv.lastMessage?.content || ""}
+                  />
+                );
+              })
+              .filter(Boolean)
           )
         ) : (
           <Loader2 />

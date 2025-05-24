@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   overflow: hidden;
   height: 100%;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -21,46 +22,359 @@ html, body {
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 222.2 47.4% 97%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --radius: 1rem;
+
+    /* Enhanced utility variables for modern UI effects */
+    --glow-shadow: 0 0 15px -3px hsl(var(--primary) / 0.4);
+    --card-shadow: 0 8px 20px -4px hsl(var(--muted) / 0.5);
+    --soft-shadow: 0 5px 15px -5px hsl(var(--muted) / 0.3);
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.8)
+    );
+    --gradient-secondary: linear-gradient(
+      135deg,
+      hsl(var(--secondary)),
+      hsl(var(--secondary) / 0.8)
+    );
+    --message-border-radius: 1.2rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 224 71.4% 4.1%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 210 100% 66%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 217.2 32.6% 12%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
+
+    /* Enhanced dark mode effects */
+    --glow-shadow: 0 0 15px -3px hsl(var(--primary) / 0.25);
+    --card-shadow: 0 8px 20px -4px hsl(var(--background) / 0.8);
+    --soft-shadow: 0 5px 15px -5px hsl(var(--background) / 0.5);
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
-
+/* Custom animations and utilities */
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  .animate-in {
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
   }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+
+  /* Glass effect for cards */
+  .glass-effect {
+    @apply bg-background/70 backdrop-blur-[8px] border-border/50;
+  }
+
+  /* Hover effect for navigation items */
+  .nav-item-hover {
+    @apply transition-all duration-200 ease-in-out hover:scale-105;
+  }
+
+  /* Hover effects for message bubbles */
+  .message-bubble {
+    @apply transition-all;
+  }
+
+  .message-bubble:hover {
+    @apply shadow-md scale-[1.01];
+  }
+
+  .elevated-card {
+    @apply shadow-lg bg-card hover:shadow-xl transition-shadow duration-300;
+  }
+
+  .glow-effect {
+    box-shadow: var(--glow-shadow);
+  }
+
+  .message-from-user {
+    @apply rounded-tr-sm rounded-tl-[var(--message-border-radius)] rounded-bl-[var(--message-border-radius)] rounded-br-[var(--message-border-radius)];
+  }
+
+  .message-from-other {
+    @apply rounded-tl-sm rounded-tr-[var(--message-border-radius)] rounded-bl-[var(--message-border-radius)] rounded-br-[var(--message-border-radius)];
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-[1.02];
+  }
+
+  /* Typography enhancements */
+  .heading-1 {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  .heading-2 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  .heading-3 {
+    @apply text-xl font-medium;
+  }
+
+  .body-text {
+    @apply text-base leading-relaxed;
+  }
+
+  /* Chat-specific utilities */
+  .typing-indicator {
+    @apply flex space-x-1 items-center py-1 px-2;
+  }
+
+  .typing-dot {
+    @apply w-2 h-2 rounded-full bg-primary/70;
+    animation: typing-bounce 1.4s infinite ease-in-out both;
+  }
+
+  .typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+  .typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+  .typing-dot:nth-child(3) {
+    animation-delay: 0s;
+  }
+}
+
+/* New animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bubbleIn {
+  from {
+    transform: translateY(5px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-up-fade {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes typing-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+@keyframes message-pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes status-pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Apply animations */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease forwards;
+}
+
+.animate-bubble-in {
+  animation: bubbleIn 0.3s ease forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s infinite;
+}
+
+.animate-slide-up-fade {
+  animation: slide-up-fade 0.3s ease forwards;
+}
+
+.animate-message-pop {
+  animation: message-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-status-pulse {
+  animation: status-pulse 1.5s ease infinite;
+}
+
+/* Staggered animation for children */
+.stagger-child > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.stagger-child > *:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.stagger-child > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.stagger-child > *:nth-child(4) {
+  animation-delay: 0.25s;
+}
+.stagger-child > *:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Hide scrollbar for mobile but keep functionality */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Modern mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-bottom-padding {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 5rem);
+  }
+
+  .mobile-friendly-tap {
+    @apply py-3 px-4;
   }
 }

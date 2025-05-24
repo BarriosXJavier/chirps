@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
+import "./enhancements.css";
 import ConvexClientProvider from "../providers/ConvexClientProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ui/themes/theme-provider";
@@ -27,7 +28,7 @@ export default function RootLayout({
         >
           <ConvexClientProvider>
             <TooltipProvider>{children}</TooltipProvider>
-            <Toaster richColors/>
+            <Toaster richColors />
           </ConvexClientProvider>
         </ThemeProvider>
       </body>
